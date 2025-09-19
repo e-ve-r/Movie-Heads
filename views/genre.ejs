@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>
+    <%= genre %> parties — Movie Heads
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header style="padding:20px; text-align:center; background:linear-gradient(90deg, #fff6f6, #fbf6ef)">
+    <h1 style="margin:0; font-family:'Bebas Neue'"><a href="/" style="text-decoration:none; color:#760404">Movie
+        Heads</a></h1>
+    <p style="margin:6px 0 0 0; color:#444">Genre: <strong>
+        <%= genre %>
+      </strong></p>
+  </header>
+
+  <div class="parties-section" style="padding-top:2rem;">
+    <h2>
+      <%= genre %> — Upcoming Parties
+    </h2>
+
+    <div class="parties-grid">
+      <% if (parties && parties.length) { %>
+        <% parties.forEach(function(p){ %>
+          <div class="party-card">
+            <img src="<%= p.poster || '/Assets/default_movie.jpg' %>" alt="<%= p.title %>"
+              onerror="this.src='/Assets/default_movie.jpg'">
+            <div class="party-info">
+              <h3>
+                <%= p.title %>
+              </h3>
+              <p>
+                <%= p.room %> · <%= p.displayDate %>
+              </p>
+              <% if (p.seatsInfo) { %>
+                <p><em>
+                    <%= p.seatsInfo %>
+                  </em></p>
+                <% } %>
+                  <% if (p.snacks) { %>
+                    <p>🍿 <%= p.snacks %>
+                    </p>
+                    <% } %>
+            </div>
+          </div>
+          <% }) %>
+            <% } else { %>
+              <p style="grid-column:1/-1; text-align:center;">No upcoming parties in this genre. Be the first to host
+                one!</p>
+              <% } %>
+    </div>
+
+    <div class="centered-cta" style="margin-bottom:2rem;">
+      <a href="/"><button class="cta">Back to Genres</button></a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Movie Heads · Made with 🍿 for students</p>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; }
+    h1 { color: #760404; }
+    .party { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #ccc; }
+    button { margin-left: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Admin – Manage Parties</h1>
+  <div id="partyList">Loading...</div>
+
+  <script>
+    const key = new URLSearchParams(window.location.search).get('key');
+    const API = `/api/admin/parties?key=${key}`;
+
+    async function loadParties() {
+      const res = await fetch(API);
+      if (!res.ok) {
+        document.body.innerHTML = "<h2>Unauthorized</h2>";
+        return;
+      }
+      const parties = await res.json();
+      const container = document.getElementById('partyList');
+      container.innerHTML = '';
+      parties.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'party';
+        div.innerHTML = `
+          <span><strong>${p.title}</strong> – ${new Date(p.dateTime).toLocaleString()}</span>
+          <span><button onclick="deleteParty('${p._id}')">Delete</button></span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function deleteParty(id) {
+      if (!confirm('Delete this party?')) return;
+      await fetch(`/api/admin/parties/${id}?key=${key}`, { method: 'DELETE' });
+      loadParties();
+    }
+
+    loadParties();
+  </script>
+</body>
+</html>

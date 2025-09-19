@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movie Heads</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="/Assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <!-- Hero Section -->
+  <div class="aboutUs-outer">
+    <h1>Where Movie Nights Meet Campus Vibes 🎬</h1>
+    <div class="aboutUs">
+      <div class="aboutUS-inner">
+        <p>
+          Lights, popcorn, action! 🍿 Our platform connects college students through their favorite movies and genres.
+        </p>
+        <p>
+          Whether it’s a Marvel marathon, a chilling horror night, or a rom-com binge, we bring fans together for
+          unforgettable hostel watch parties.
+        </p>
+        <p>
+          Join in, share snacks, and make every screening a memory—because movies are better when watched together. ✨
+        </p>
+
+        <div class="cta-buttons">
+          <button class="cta" id="openHostModal">Host a Movie Night</button>
+          <a href="#parties-section"><button class="cta secondary">Find a Watch Party</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie Genres Section -->
+  <div class="genres-section">
+    <h2>Explore The Genres</h2>
+    <div class="genres-grid">
+      <% genres.forEach(function(g){ %>
+        <div class="genre-item">
+          <a href="/genre/<%= encodeURIComponent(g) %>" style="text-decoration:none; color:inherit;">
+            <img src="/Assets/<%= g.toLowerCase() %>.webp" alt="<%= g %>"
+              loading="lazy"
+              onerror="this.onerror=null; this.src='/Assets/default_genre.jpg'">
+            <h3><%= g %></h3>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Upcoming Watch Parties -->
+  <div class="parties-section" id="parties-section">
+    <h2>Upcoming Watch Parties</h2>
+    <div class="parties-grid">
+      <% if (upcoming && upcoming.length) { %>
+        <% upcoming.forEach(function(p){ %>
+          <div class="party-card">
+            <img 
+              src="<%= p.poster || '/Assets/default_movie.jpg' %>" 
+              alt="<%= p.title %>"
+              loading="lazy"
+              onerror="this.onerror=null; this.src='/Assets/default_movie.jpg';">
+            <div class="party-info">
+              <h3><%= p.title %></h3>
+              <p>
+                <b>Room No:</b> <%= p.room %> <br>
+                <b>Date & Time:</b> <%= p.displayDate %> <br>
+                <% if (p.seatsInfo) { %><b>Seats:</b> <%= p.seatsInfo %><% } %>
+              </p>
+              <% if (p.snacks) { %>
+                <p style="margin-top:6px;">🍿 <em><%= p.snacks %></em></p>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p style="grid-column: 1/-1; text-align:center;">
+          No upcoming parties yet — be the first to host!
+        </p>
+      <% } %>
+    </div>
+
+    <div class="centered-cta">
+      <a href="/"><button class="cta">View All Parties</button></a>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="how-section">
+    <h2>How It Works</h2>
+    <div class="steps-grid">
+      <div class="step"><span>🎬</span><h3>Browse Genres</h3><p>Pick what you love—from Marvel to Rom-Coms.</p></div>
+      <div class="step"><span>🛏️</span><h3>Join or Host</h3><p>Create your own movie night or join others.</p></div>
+      <div class="step"><span>🍿</span><h3>Enjoy Together</h3><p>Watch, snack, and vibe with fellow students.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Movie Heads · Made with 🍿</p>
+    <div class="footer-links">
+      <a href="#">About</a> | 
+      <a href="https://github.com/e-ve-r" target="_blank" rel="noopener noreferrer">GitHub</a> | 
+      <a href="https://www.linkedin.com/in/e-v-e-r" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </footer>
+
+  <!-- HOST PARTY POPUP MODAL -->
+  <div id="hostPartyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Host a Watch Party</h2>
+
+      <form id="hostPartyForm" method="POST" action="/host">
+        <label for="title">Movie/Show Name:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre" required>
+          <option value="">Select Genre</option>
+          <% genres.forEach(function(g){ %>
+            <option value="<%= g %>"><%= g %></option>
+          <% }) %>
+        </select>
+
+        <label for="room">Room No:</label>
+        <input type="text" id="room" name="room" placeholder="e.g., Room 101 · Ground floor" required>
+
+        <label for="dateTime">Date & Time:</label>
+        <input type="datetime-local" id="dateTime" name="dateTime" required>
+
+        <label for="seatsInfo">Seats:</label>
+        <input type="text" id="seatsInfo" name="seatsInfo" placeholder="e.g., 2 seats left">
+
+        <label for="snacks">Snacks (optional):</label>
+        <input type="text" id="snacks" name="snacks" placeholder="e.g., Chips & Soda — shared">
+
+        <button type="submit" class="cta">Host Party</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
